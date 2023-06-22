@@ -128,11 +128,10 @@ class light_model:  public  high_speed ,   public  low_speed{public:
     ~light_model(){}
 };
 int main(){
-    int deliveryspeed=-1,traffic = -1;
-    float weight = 0,altitudes;
+    int deliveryspeed=-1,country=-1,city=-1,distance=-1,ranges=-1,traffic=-1,speeds=-1;
+    float weight = 0,altitudes=0;
     string state_of_matter = "",location= "",weather="";
-    int country=-1,city=-1,distance=-1,ranges=-1;
-    int speeds;
+    bool reorder=0;
     cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
     while (deliveryspeed!=1 && deliveryspeed!=0)
     {
@@ -149,6 +148,7 @@ int main(){
         cout<<"PLease select the city you want to send your Parcel in, press 1 for Lahore, 2 for Islamabad."<<endl;
         cin>>country;
     }
+    while(location!="1" && location!="2" && location!="3" && location!="4" && location!="5" && location!="6" && location!="7" && location!="8"  )
     if (country==1){
         cout<<"Press 1 for Johar Town, 2 for Bahria Town, 3 for Defence, and 4 for Garden Town."<<endl;
         cin>>location;
@@ -159,12 +159,17 @@ int main(){
     }
     cout<<"Enter Weight of your parcel:"<<endl;
     cin>>weight;
-    cout<<"What is the usual Weather at this location, enter Sunny or RAainy: "<<endl;
-    cin>>weather;
-    cout<<"Is this area usually crowded, Press 1 if yes, else 0! "<<endl;
-    cin>>deliveryspeed;
+    while(weather!="Sunny" && weather!="Rainy"){
+        cout<<"What is the usual Weather at this location, enter Sunny or Rainy: "<<endl;
+        cin>>weather;
+    }
+    while(traffic!=1 && traffic!=0){
+        cout<<"Is this area usually crowded, Press 1 if yes, else 0! "<<endl;
+        cin>>traffic;
+    }
     if (deliveryspeed==0){
         low_speed l1(weight,state_of_matter,traffic,location,weather);
+        low_speed l2(l1);
         l1.s_distance(location);
         speeds = speed(l1);
         distance = l1.g_distance();
@@ -191,6 +196,7 @@ int main(){
  
     else if (deliveryspeed==1){
         high_speed h1(weight,state_of_matter,traffic,location,weather);
+        high_speed h2(h1);
         h1.s_distance(location);
         speeds = speed(h1);
         distance = h1.g_distance();
@@ -220,7 +226,17 @@ int main(){
 
     float timee = calctime(altitudes,distance,speeds);
     cout << timee;
-       
+    do{
+        cout<<"Do you wish to re-order the delivery of this parcel? if yes, press 1, else 0."<<endl;
+        cin>>reorder;
+    }while(reorder!=1 && reorder!=0);
+    if(reorder==1 && deliveryspeed==0){
+        
+    }
+    else if(reorder==1 && deliveryspeed==1){
+        
+    }
+
 }
 float calctime(int alt,int dist,int speed){
     float Time = dist / speed + (2 * alt / speed);
@@ -228,8 +244,9 @@ float calctime(int alt,int dist,int speed){
 }
 
 /*
--Add validation checks
--Utilize copy constructor for re-delivering a parcel
--Construct GUI
+Pending Tasks:
+-Utilize h1 and l1 copy constructor in reorder while loop!
+-add realistic altitude,distances,etc...
+-Construct GUI.
 */
     
