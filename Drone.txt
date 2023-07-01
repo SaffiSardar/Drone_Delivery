@@ -128,8 +128,8 @@ class light_model:  public  high_speed ,   public  low_speed{public:
     ~light_model(){}
 };
 int main(){
-    int deliveryspeed=-1,country=-1,city=-1,distance=-1,ranges=-1,traffic=-1,speeds=-1;
-    float weight = 0,altitudes=0;
+    int deliveryspeed=-1,country=-1,city=-1,distance=-1,distance1=-1,ranges=-1,ranges1=-1,traffic=-1,speeds=-1,speeds1=-1;
+    float weight = 0,altitudes=0,altitudes1=0;
     string state_of_matter = "",location= "",weather="";
     bool reorder=0;
     cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
@@ -171,24 +171,33 @@ int main(){
         low_speed l1(weight,state_of_matter,traffic,location,weather);
         low_speed l2(l1);
         l1.s_distance(location);
+        l2.s_distance(location);
         speeds = speed(l1);
+        speeds1= speed(l2);
         distance = l1.g_distance();
+        distance1= l2.g_distance();
         if (distance<=600){
             ranges=l1.low_range::range();
+            ranges=l2.low_range::range();
             if(deliveryspeed==1 && weather=="Sunny"){
-                altitudes=l1.highalt();
+                altitudes =l1.highalt();
+                altitudes1=l2.highalt();
             }
             else{
-                altitudes=l1.lowalt();
+                altitudes =l1.lowalt();
+                altitudes1=l2.lowalt();
             }
         }
         else{
-            ranges=l1.high_range::range();
+            ranges =l1.high_range::range();
+            ranges1=l2.high_range::range();
             if(deliveryspeed==1 && weather=="Sunny"){
-                altitudes=l1.highalt();
+                altitudes =l1.highalt();
+                altitudes1=l2.highalt();
             }
             else{
-                altitudes=l1.lowalt();
+                altitudes =l1.lowalt();
+                altitudes1=l2.lowalt();
             }
         }
         
@@ -198,43 +207,47 @@ int main(){
         high_speed h1(weight,state_of_matter,traffic,location,weather);
         high_speed h2(h1);
         h1.s_distance(location);
+        h2.s_distance(location);
         speeds = speed(h1);
+        speeds1= speed(h2);
         distance = h1.g_distance();
+        distance1= h2.g_distance();
         if (distance<=600){
-            ranges=h1.low_range::range();
+            ranges =h1.low_range::range();
+            ranges1=h2.low_range::range();
             if(deliveryspeed==1 && weather=="Sunny"){
-                altitudes=h1.highalt();
+                altitudes =h1.highalt();
+                altitudes1=h2.highalt();
             }
             else{
-                altitudes=h1.lowalt();
+                altitudes =h1.lowalt();
+                altitudes1=h2.lowalt();
             }
         }
         else{
-            ranges=h1.high_range::range();
+            ranges =h1.high_range::range();
+            ranges1=h2.high_range::range();
             if(deliveryspeed==1 && weather=="Sunny"){
-                altitudes=h1.highalt();
+                altitudes =h1.highalt();
+                altitudes1=h2.highalt();
             }
             else{
-                altitudes=h1.lowalt();
+                altitudes =h1.lowalt();
+                altitudes1=h2.lowalt();
             }
         }
     }
 
     cout<<altitudes<<endl;
     cout<<distance<<endl;
-    cout<<speeds;
+    cout<<speeds<<endl;
 
     float timee = calctime(altitudes,distance,speeds);
     cout << timee;
-    do{
-        cout<<"Do you wish to re-order the delivery of this parcel? if yes, press 1, else 0."<<endl;
-        cin>>reorder;
-    }while(reorder!=1 && reorder!=0);
-    if(reorder==1 && deliveryspeed==0){
-        
-    }
-    else if(reorder==1 && deliveryspeed==1){
-        
+    cout<<"Do you wish to re-order the delivery of this parcel? if yes, press 1, else 0."<<endl;
+    cin>>reorder;
+    if(reorder==1){
+        cout<<"Your order for re-delivery has been placed, it will take the same time as before: "<<timee<<endl;
     }
 
 }
@@ -245,9 +258,7 @@ float calctime(int alt,int dist,int speed){
 
 /*
 Pending Tasks:
--Utilize h1 and l1 copy constructor in reorder while loop!
 -add realistic altitude,distances,etc...
 -Construct GUI.
-*/
-.
-    
+*/ 
+
