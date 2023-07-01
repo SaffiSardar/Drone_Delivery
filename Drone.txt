@@ -1,7 +1,6 @@
 #include<iostream>
 using namespace std;
 //10000,300,100
-float calctime(int alt,int dist,int speed);
 class drone{
 protected:
     float*weight;
@@ -37,6 +36,17 @@ public:
         *weather = *(obj.weather);
         distance = obj.distance;// Shallow Copy
     }
+
+    drone operator + (const drone& obj){
+        drone temp1;
+        *(temp1.weight)= *weight + *(obj.weight);
+        *(temp1.state_of_matter)= *state_of_matter;
+        *(temp1.traffic)= *traffic;
+        *(temp1.location)= *location;
+        *(temp1.weather)= *weather;
+        return temp1;
+    }
+
     bool s_traffic(){return *traffic;}
     string s_location(){return *location;}
     string g_weather(){return *weather;}
@@ -56,10 +66,18 @@ public:
     }
     int g_distance(){return distance;}
 //Destructor
+    ~drone()
+    {
+        delete weight;
+        delete state_of_matter;
+        delete location;
+        delete traffic;
+        delete weather;
+    }
 };
 class high_altitude:virtual public drone{
-    protected:
-        double altitude = 10000;
+
+    double altitude = 10000;
     public:
     high_altitude(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):drone(weight,state_of_matter,traffic,location,weather){}
     high_altitude(const high_altitude &obj):drone(obj){}
@@ -69,8 +87,8 @@ class high_altitude:virtual public drone{
     }
 };
 class low_altitude:virtual public drone{
-    protected:
-        double altitude=5000;
+
+    double altitude=5000;
     public:
     low_altitude(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):drone(weight,state_of_matter,traffic,location,weather){}
     low_altitude(const low_altitude &obj):drone(obj){}
@@ -97,8 +115,8 @@ class low_range:public virtual high_altitude,public virtual low_altitude{
 };
 class heavy_model;
 class high_speed: public high_range, public low_range{
-    protected:
-        int speed = 100;
+
+    int speed = 100;
     public:
     high_speed(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):high_range(weight,state_of_matter,traffic,location,weather),low_range(weight,state_of_matter,traffic,location,weather),high_altitude(weight,state_of_matter,traffic,location,weather),low_altitude(weight,state_of_matter,traffic,location,weather),drone(weight,state_of_matter,traffic,location,weather){}
     high_speed(const high_speed &obj):high_range(obj),low_range(obj),high_altitude(obj),low_altitude(obj),drone(obj){}
@@ -107,8 +125,8 @@ class high_speed: public high_range, public low_range{
 };
 class low_speed:   public high_range,   public low_range{
 friend class heavy_modle;
-    protected:
-        int speed = 50;
+    
+    int speed = 50;
     public:
     low_speed(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):high_range(weight,state_of_matter,traffic,location,weather),low_range(weight,state_of_matter,traffic,location,weather),high_altitude(weight,state_of_matter,traffic,location,weather),low_altitude(weight,state_of_matter,traffic,location,weather),drone(weight,state_of_matter,traffic,location,weather){}
     low_speed(const low_speed &obj):high_range(obj),low_range(obj),high_altitude(obj),low_altitude(obj),drone(obj){}
@@ -128,10 +146,9 @@ class light_model:  public  high_speed ,   public  low_speed{public:
     ~light_model(){}
 };
 int main(){
-    int deliveryspeed=-1,country=-1,city=-1,distance=-1,distance1=-1,ranges=-1,ranges1=-1,traffic=-1,speeds=-1,speeds1=-1;
-    float weight = 0,altitudes=0,altitudes1=0;
+    int deliveryspeed=-1,country=-1,city=-1,distance=-1,distance1=-1,ranges=-1,ranges1=-1,traffic=-1,speeds=-1,speeds1=-1,reorder=0;
+    float weight = 0,weight1 = 0,altitudes=0,altitudes1=0;
     string state_of_matter = "",location= "",weather="";
-    bool reorder=0;
     cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
     while (deliveryspeed!=1 && deliveryspeed!=0)
     {
@@ -170,6 +187,8 @@ int main(){
     if (deliveryspeed==0){
         low_speed l1(weight,state_of_matter,traffic,location,weather);
         low_speed l2(l1);
+        drone l3=l1+l2;
+        weight1=l3.g_weight();
         l1.s_distance(location);
         l2.s_distance(location);
         speeds = speed(l1);
@@ -206,6 +225,8 @@ int main(){
     else if (deliveryspeed==1){
         high_speed h1(weight,state_of_matter,traffic,location,weather);
         high_speed h2(h1);
+        drone h3=h1+h2;
+        weight1=h3.g_weight();
         h1.s_distance(location);
         h2.s_distance(location);
         speeds = speed(h1);
@@ -242,19 +263,34 @@ int main(){
     cout<<distance<<endl;
     cout<<speeds<<endl;
 
-    float timee = calctime(altitudes,distance,speeds);
+    Time<float>time;
+    float timee = time.calc_Time(altitudes,distance,speeds);
     cout << timee;
     cout<<"Do you wish to re-order the delivery of this parcel? if yes, press 1, else 0."<<endl;
     cin>>reorder;
     if(reorder==1){
-        cout<<"Your order for re-delivery has been placed, it will take the same time as before: "<<timee<<endl;
+        cout<<"Your order for re-delivery has been placed, it will take the same time as before, both of your parcel will reach destination in : "<<2*timee<<"s"<<endl;
+    }
+    cout<<"Do you wish to enter both your parcels in the same drone to save time? Press 1 if yes, else 0."<<endl;
+    cin>>reorder;
+    if (reorder==1){
+        cout<<weight1;
+        cout<<"Parcels will reach destination in : "<<timee/2<<"s. "<<"Congrats!"<<endl;
     }
 
 }
-float calctime(int alt,int dist,int speed){
-    float Time = dist / speed + (2 * alt / speed);
-    return Time;    
-}
+template<class T>
+class Time
+{
+    T time;
+    public:
+    T calc_Time(T alt,T dist,T speed)
+    {
+        time = dist / speed + (2 * alt / speed);
+        return time;
+    }
+};
+
 
 /*
 Pending Tasks:
