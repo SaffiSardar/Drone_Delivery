@@ -2,13 +2,23 @@
 #include<iostream>
 using namespace std;
 
-class drone{
+class detail{
+    public:
+        virtual void details()=0;
+};
+
+class drone:public detail{
 protected:
     float*weight;
     int distance;
     string*state_of_matter,*location,*weather;
     bool*traffic;
 public:
+
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
+
 //Default Parameterized Constructor
     drone(float Weight=0.0,string State_of_matter="",bool Traffic=0,string Location="",string Weather=""){
         weight = new float;
@@ -71,6 +81,9 @@ class high_altitude:virtual public drone{
     protected:
         double altitude = 10000;
     public:
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
         high_altitude(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):drone(weight,state_of_matter,traffic,location,weather){}
         high_altitude(const high_altitude &obj):drone(obj){}
         ~high_altitude(){}
@@ -82,6 +95,9 @@ class low_altitude:virtual public drone{
     protected:
         double altitude=5000;
     public:
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
         low_altitude(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):drone(weight,state_of_matter,traffic,location,weather){}
         low_altitude(const low_altitude &obj):drone(obj){}
         ~low_altitude(){}
@@ -91,6 +107,9 @@ class low_altitude:virtual public drone{
 };
 class high_range:public virtual high_altitude,virtual public low_altitude{
     public:
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
         high_range(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):high_altitude(weight,state_of_matter,traffic,location,weather),low_altitude(weight,state_of_matter,traffic,location,weather),drone(weight,state_of_matter,traffic,location,weather){}
         high_range(const high_range &obj):high_altitude(obj),low_altitude(obj),drone(obj){}
         ~high_range(){}
@@ -100,6 +119,9 @@ class high_range:public virtual high_altitude,virtual public low_altitude{
 };
 class low_range:public virtual high_altitude,public virtual low_altitude{
     public:
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
         low_range(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):high_altitude(weight,state_of_matter,traffic,location,weather),low_altitude(weight,state_of_matter,traffic,location,weather),drone(weight,state_of_matter,traffic,location,weather){}
         low_range(const low_range &obj):high_altitude(obj),low_altitude(obj),drone(obj){}
         ~low_range(){}
@@ -112,6 +134,9 @@ class high_speed: virtual public high_range, virtual public low_range{
     protected:
         int speed = 100;
     public:
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
         high_speed(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):high_range(weight,state_of_matter,traffic,location,weather),low_range(weight,state_of_matter,traffic,location,weather),high_altitude(weight,state_of_matter,traffic,location,weather),low_altitude(weight,state_of_matter,traffic,location,weather),drone(weight,state_of_matter,traffic,location,weather){}
         high_speed(const high_speed &obj):high_range(obj),low_range(obj),high_altitude(obj),low_altitude(obj),drone(obj){}
         friend int speed(high_speed h);
@@ -121,8 +146,12 @@ class heavy_model;
 class low_speed:  virtual public high_range, virtual  public low_range{
         friend class heavy_model;
     protected:
+    
         int speed = 50;
     public:
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
         low_speed(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):high_range(weight,state_of_matter,traffic,location,weather),low_range(weight,state_of_matter,traffic,location,weather),high_altitude(weight,state_of_matter,traffic,location,weather),low_altitude(weight,state_of_matter,traffic,location,weather),drone(weight,state_of_matter,traffic,location,weather){}
         low_speed(const low_speed &obj):high_range(obj),low_range(obj),high_altitude(obj),low_altitude(obj),drone(obj){}
         friend int speed(low_speed l);
@@ -131,10 +160,14 @@ class low_speed:  virtual public high_range, virtual  public low_range{
 int speed(high_speed h){return h.speed;}
 int speed(low_speed h ){return h.speed;}
 class heavy_model{};
-class light_model:  public  high_speed ,   public  low_speed{public:
+class light_model:  public  high_speed ,   public  low_speed{
+    public:
+    void details(){
+            cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    }
+    
         light_model(float weight=0.0,string state_of_matter="",bool traffic=0,string location="",string weather=""):high_speed(weight,state_of_matter,traffic,location,weather),low_speed(weight,state_of_matter,traffic,location,weather),high_altitude(weight,state_of_matter,traffic,location,weather),low_altitude(weight,state_of_matter,traffic,location,weather),drone(weight,state_of_matter,traffic,location,weather){}
         light_model(const light_model &obj):high_speed(obj),low_speed(obj),high_altitude(obj),low_altitude(obj),drone(obj){}
-        void details();
         ~light_model(){}
 };
 template<class T>
@@ -153,7 +186,8 @@ int main(){
     float weight = 0,weight1 = 0,altitudes=0,altitudes1=0;
     string state_of_matter = "",location= "",weather="";
     bool reorder=0 , flag = 0;
-    cout<<"Welcome to Your Very own Drone delivery system!"<<endl;
+    drone d1;
+    d1.details();
     while (deliveryspeed!=1 && deliveryspeed!=0)
     {
         cout<<"If you want Fast Delivery, press 1, else for Normal Delivery, press 0."<<endl;
